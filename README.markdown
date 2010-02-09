@@ -4,8 +4,8 @@ To create an IRC bot that will publish Google Code changes to an IRC channel. Ev
 
 ## Roadmap
 
-  * <s>Basic feed based IRC bot</s>
-  * <s>Multiple project support with YAML & Multiprocessing</s>
+  * Basic feed based IRC bot - DONE
+  * Multiple project support with YAML & Multiprocessing - DONE
   * Daemon monitoring, auditing & dynamic loading.
   * In depth logging facilities.
   * Query interaction.
