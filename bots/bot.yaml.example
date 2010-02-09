@@ -1,0 +1,9 @@
+project:
+  name: 'example'
+  bot:
+    name: 'example-gc-bot'
+    channel: '#example'
+    server: 'chat.freenode.net'
+    port: 6667
+  feed:
+    refresh: 600
