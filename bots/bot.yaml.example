@@ -5,5 +5,7 @@ project:
     channel: '#example'
     server: 'chat.freenode.net'
     port: 6667
-  feed:
-    refresh: 600
+  feeds:
+    issues: 600
+    downloads: 600
+    wiki: 600

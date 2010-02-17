@@ -1,7 +1,22 @@
 # -*- coding: utf-8 -*-
 
+# http://twistedmatrix.com/documents/8.2.0/api/twisted.words.protocols.irc.IRCClient.html
+# http://www.eflorenzano.com/blog/post/writing-markov-chain-irc-bot-twisted-and-python/
+
 from twisted.words.protocols import irc
 from twisted.internet import reactor, protocol, task
+
+		#def strip_tags(value):
+		#return re.sub( r'<[^>]*?>', '', value )
+
+#def announce( feed ):
+	#new = feed.update()
+	#for entry in new:
+		#msg = '%s: %s' % ( strip_tags( entry['title'] ), entry['link'] )
+		#if AnnounceBot.instance:
+			#AnnounceBot.instance.trysay( msg.replace( '\n', '' ).encode( 'utf-8' ) )
+	
+
 
 class AnnounceBot( irc.IRCClient ):
 

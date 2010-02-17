@@ -1,18 +1,35 @@
 # -*- coding: utf-8 -*-
 
+import gdata.projecthosting.client
+import gdata.projecthosting.data
+import gdata.client
+import gdata.data
+import atom.http_core
+import atom.core
+
 # http://code.google.com/p/support/wiki/IssueTrackerAPIPython
 
 class GoogleIssueTracker:
 	def __init__ ( self, username, password, project ):
+		self.project = project
 		self.client = gdata.projecthosting.client.ProjectHostingClient()
 		if False == self.client.client_login( username, password, source='Google_Code_IRC_Bot', service='code' ):
 			raise Exception( 'Could not log in to Google Issue Tracker. Bad Credentials.' )
 	
-	#def retrieving_all_issues(self, client, project_name):
-		#"""Retrieve all the issues in a project."""
-		#feed = client.get_issues(project_name)
-		#for issue in feed.entry:
-			#print issue.title.text
+	def get_all_issues ( self ):
+		"""
+		Retrieve all the issues in a project.
+		"""
+		feed = self.client.get_issues( self.project )
+		issues = []
+		for issue in feed.entry:
+			issues.append( issue )
+	
+	def get_issue_count ( self ):
+		"""
+		Get a count of all the open issues.
+		"""
+		return len( self.get_all_issues() )
 	
 	#def retrieving_issues_using_query_parameters(self, client, project_name):
 		#"""Retrieve a set of issues in a project."""

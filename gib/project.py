@@ -21,7 +21,7 @@ class Project:
 			if 'project' not in self.settings.keys():
 				raise KeyError( '/project' )
 			
-			for key in ( 'name', 'bot', 'feed' ):
+			for key in ( 'name', 'bot', 'feeds' ):
 				if key not in self.settings['project'].keys():
 					raise KeyError( '/project/' + key )
 
@@ -29,8 +29,9 @@ class Project:
 				if key not in self.settings['project']['bot'].keys():
 					raise KeyError( '/project/bot/' + key )
 
-			if 'refresh' not in self.settings['project']['feed'].keys():
-				raise KeyError( '/project/feed/refresh' )
+			for key in ( 'issues', 'downloads', 'wiki' ):
+				if key not in self.settings['project']['feeds'].keys():
+					raise KeyError( '/project/feeds/' + key )
 
 			self.name = self.settings['project']['name']
 
@@ -52,5 +53,5 @@ class Project:
 					project = Project( path + filename )
 					projects.append( project )
 				except Exception, e:
-					continue
+					print e
 		return projects
