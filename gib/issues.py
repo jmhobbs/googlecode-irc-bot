@@ -46,6 +46,7 @@ class GoogleIssueTracker:
 		issues = []
 		for issue in feed.entry:
 			issues.append( issue )
+		return issues
 	
 	def get_issue_count ( self ):
 		"""

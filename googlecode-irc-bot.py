@@ -41,6 +41,12 @@ def run_bot ( project ):
 	"""
 	ircbot.GoogleCodeIRCBot.nickname = project.settings['project']['bot']['name']
 	
+	if project.settings['project']['issues']['username'] != '' and project.settings['project']['issues']['password'] != '':
+		try:
+			ircbot.GoogleCodeIRCBot.gdata = issues.GoogleIssueTracker( project.settings['project']['issues']['username'], project.settings['project']['issues']['password'], project.name )
+		except:
+			ircbot.GoogleCodeIRCBot.gdata = None
+	
 	factory = ircbot.GoogleCodeIRCBotFactory( project.settings['project']['bot']['channel'] )
 	
 	issues_feed = None

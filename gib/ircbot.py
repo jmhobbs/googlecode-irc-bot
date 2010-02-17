@@ -10,10 +10,10 @@
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -37,14 +37,15 @@ def announce ( feed ):
 			print "No Bot", msg
 
 class GoogleCodeIRCBot ( irc.IRCClient ):
-	
+
 	username = "%s-%s" % ( shared.NAME, shared.VERSION )
-	
+
 	versionName = shared.NAME
 	versionNum = shared.VERSION
 	sourceURL = shared.SOURCE_URL
-	
+
 	instance = None
+	gdata = None
 	channel = None
 	lineRate = 2
 
@@ -72,10 +73,32 @@ class GoogleCodeIRCBot ( irc.IRCClient ):
 				return True
 			except: pass
 
+	def privmsg ( self, user, channel, msg ):
+		user = user.split('!', 1)[0]
+
+		if channel == self.nickname:
+				msg = "It isn't nice to whisper!  Play nice with the group."
+				self.msg( user, msg )
+				return
+
+		if channel == self.channel:
+			if msg.startswith( self.nickname + ":" ):
+				args = msg.split( ' ')
+				if 'OPEN' == args[1]:
+					if self.gdata:
+						msg = "%s: There are %d open issues." % ( user, self.gdata.get_issue_count() )
+					else:
+						msg = "Sorry, I have no connection to the issue tracker."
+				elif 'HELP' == args[1]:
+					msg = "%s: Valid commands are [ OPEN, HELP ]. Please visit %s for more help." % ( user, shared.SOURCE_URL )
+				else:
+					msg = "%s: Um, what? Try HELP." % user
+				self.trysay( msg )
+
 class GoogleCodeIRCBotFactory( protocol.ReconnectingClientFactory ):
 
 	protocol = GoogleCodeIRCBot
-	
+
 	def __init__( self, channel ):
 		self.channel = channel
 
