@@ -24,14 +24,22 @@
 
 import time
 
-# TODO: Log file rotations?
-
 class IRCLogger:
-	def __init__ ( self, path ):
+	def __init__ ( self, path, prefix ):
 		self.path = path
-		self.file = open( path, "a" )
+		self.prefix = prefix
+		self.date = time.strftime( "%Y-%m-%d", time.localtime( time.time() ) )
+		self.file = open( self.get_log_file_path(), "a" )
+
+	def get_log_file_path ( self ):
+		return self.path + self.prefix + "_" + self.date + ".log"
 
 	def log ( self, message ):
+		if self.date != time.strftime( "%Y-%m-%d", time.localtime( time.time() ) ):
+			self.file.close()
+			self.date = time.strftime( "%Y-%m-%d", time.localtime( time.time() ) )
+			self.file = open( self.get_log_file_path(), "a" )
+			self.log( '[log file rotation]' )
 		self.file.write( '%s %s\n' % ( time.strftime( "[%H:%M:%S]", time.localtime( time.time() ) ), message ) )
 		self.file.flush()
 

@@ -48,7 +48,7 @@ def run_bot ( project ):
 			ircbot.GoogleCodeIRCBot.gdata = None
 	
 	if project.settings['project']['logging']:
-		ircbot.GoogleCodeIRCBot.logger = logger.IRCLogger( shared.IRC_LOGS + project.name + ".log" )
+		ircbot.GoogleCodeIRCBot.logger = logger.IRCLogger( shared.IRC_LOGS, project.name )
 	
 	factory = ircbot.GoogleCodeIRCBotFactory( project.settings['project']['bot']['channel'] )
 	
