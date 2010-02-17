@@ -43,7 +43,7 @@ class Project:
 			if 'project' not in self.settings.keys():
 				raise KeyError( '/project' )
 			
-			for key in ( 'name', 'bot', 'feeds', 'issues' ):
+			for key in ( 'name', 'bot', 'feeds', 'issues', 'logging' ):
 				if key not in self.settings['project'].keys():
 					raise KeyError( '/project/' + key )
 

@@ -30,7 +30,7 @@ if __name__ != '__main__':
 	exit()
 
 from twisted.internet import reactor, task
-from gib import ircbot, issues, project, readers, shared
+from gib import ircbot, issues, project, readers, shared, logger
 import sys
 from time import sleep
 from multiprocessing import Process
@@ -46,6 +46,9 @@ def run_bot ( project ):
 			ircbot.GoogleCodeIRCBot.gdata = issues.GoogleIssueTracker( project.settings['project']['issues']['username'], project.settings['project']['issues']['password'], project.name )
 		except:
 			ircbot.GoogleCodeIRCBot.gdata = None
+	
+	if project.settings['project']['logging']:
+		ircbot.GoogleCodeIRCBot.logger = logger.IRCLogger( shared.IRC_LOGS + project.name + ".log" )
 	
 	factory = ircbot.GoogleCodeIRCBotFactory( project.settings['project']['bot']['channel'] )
 	

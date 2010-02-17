@@ -48,6 +48,17 @@ class GoogleCodeIRCBot ( irc.IRCClient ):
 	gdata = None
 	channel = None
 	lineRate = 2
+	logger = None
+
+	def connectionMade ( self ):
+		irc.IRCClient.connectionMade( self )
+		if self.logger:
+			self.logger.connected()
+	
+	def connectionLost( self, reason ):
+		irc.IRCClient.connectionLost( self, reason )
+		if self.logger:
+			self.logger.disconnected( reason )
 
 	def signedOn( self ):
 		self.join( self.factory.channel )
@@ -55,6 +66,10 @@ class GoogleCodeIRCBot ( irc.IRCClient ):
 
 	def joined( self, channel ):
 		self.channel = self.factory.channel
+		
+		if self.logger:
+			self.logger.joined( channel )
+		
 		self.lineRate = None
 		self.trysay( "Hello, I'm a Google Code IRC Bot, Version %s" % shared.VERSION )
 		self.trysay( "More details are available at %s" % shared.SOURCE_URL )
@@ -76,6 +91,9 @@ class GoogleCodeIRCBot ( irc.IRCClient ):
 	def privmsg ( self, user, channel, msg ):
 		user = user.split('!', 1)[0]
 
+		if self.logger:
+			self.logger.message( user, msg )
+
 		if channel == self.nickname:
 				msg = "It isn't nice to whisper!  Play nice with the group."
 				self.msg( user, msg )
@@ -94,6 +112,16 @@ class GoogleCodeIRCBot ( irc.IRCClient ):
 				else:
 					msg = "%s: Um, what? Try HELP." % user
 				self.trysay( msg )
+
+	def action ( self, user, channel, msg ):
+		if self.logger:
+			self.logger.action( user, msg )
+
+	def irc_NICK ( self, prefix, params ):
+		if self.logger:
+			old_nick = prefix.split('!')[0]
+			new_nick = params[0]
+			self.logger.nick_change( old_nick, new_nick )
 
 class GoogleCodeIRCBotFactory( protocol.ReconnectingClientFactory ):
 

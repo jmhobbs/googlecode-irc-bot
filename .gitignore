@@ -3,3 +3,4 @@ bots/*.yaml
 atom/*
 gdata/*
 shelf/*.shelf
+*.log

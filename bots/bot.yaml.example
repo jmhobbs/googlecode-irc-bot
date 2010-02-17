@@ -12,3 +12,4 @@ project:
   issues:
     username: example@gmail.com
     password: example
+  logging: True
