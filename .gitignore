@@ -1,2 +1,5 @@
 *.pyc
 bots/*.yaml
+atom/*
+gdata/*
+shelf/*.shelf
