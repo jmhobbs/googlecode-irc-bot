@@ -19,6 +19,11 @@ class GoogleFeedReader:
 			self.shelf[self._name] = {}
 		
 		self.last_id = self.read( 'last_id' )
+		
+		# Prevent first run spamming
+		if None == self.read( 'first_run' ):
+			self.update()
+			self.write( 'first_run', False )
 	
 	def __del__ ( self ):
 		self.write( 'last_id', self.last_id )
@@ -57,6 +62,9 @@ class GoogleFeedReader:
 		self.last_id = feed['entries'][0]['id']
 		return added
 
+	def get_message ( self, entry ):
+		return '%s: %s' % ( shared.strip_tags( entry['title'] ), entry['link'] )
+
 class IssueUpdatesReader ( GoogleFeedReader ):
 
 	_schema = 'http://code.google.com/feeds/p/%s/issueupdates/basic'
@@ -64,6 +72,9 @@ class IssueUpdatesReader ( GoogleFeedReader ):
 	
 	def __init__( self, project ):
 		GoogleFeedReader.__init__( self, project )
+		
+	def get_message ( self, entry ):
+		return '[Issues] %s: %s' % ( shared.strip_tags( entry['title'] ), entry['link'] )
 
 class DownloadsReader ( GoogleFeedReader ):
 
@@ -73,6 +84,9 @@ class DownloadsReader ( GoogleFeedReader ):
 	def __init__( self, project ):
 		GoogleFeedReader.__init__( self, project )
 
+	def get_message ( self, entry ):
+		return '[Downloads] %s: %s' % ( shared.strip_tags( entry['title'] ), entry['link'] )
+
 class WikiReader ( GoogleFeedReader ):
 
 	_schema = 'http://code.google.com/feeds/p/%s/svnchanges/basic?path=/wiki/'
@@ -80,3 +94,6 @@ class WikiReader ( GoogleFeedReader ):
 
 	def __init__( self, project ):
 		GoogleFeedReader.__init__( self, project )
+
+	def get_message ( self, entry ):
+		return '[Wiki] %s: %s' % ( shared.strip_tags( entry['title'] ), entry['link'] )

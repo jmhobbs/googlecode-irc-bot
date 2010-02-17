@@ -7,16 +7,16 @@ from twisted.words.protocols import irc
 from twisted.internet import reactor, protocol, task
 
 import shared
-		#def strip_tags(value):
-		#return re.sub( r'<[^>]*?>', '', value )
 
-#def announce( feed ):
-	#new = feed.update()
-	#for entry in new:
-		#msg = '%s: %s' % ( strip_tags( entry['title'] ), entry['link'] )
-		#if AnnounceBot.instance:
-			#AnnounceBot.instance.trysay( msg.replace( '\n', '' ).encode( 'utf-8' ) )
-	
+def announce ( feed ):
+	new = feed.update()
+	for entry in new:
+		msg = feed.get_message( entry )
+		if GoogleCodeIRCBot.instance:
+			GoogleCodeIRCBot.instance.trysay( msg.replace( '\n', '' ).encode( 'utf-8' ) )
+		else:
+			print "No Bot", msg
+
 class GoogleCodeIRCBot ( irc.IRCClient ):
 	
 	username = "%s-%s" % ( shared.NAME, shared.VERSION )
@@ -27,11 +27,7 @@ class GoogleCodeIRCBot ( irc.IRCClient ):
 	
 	instance = None
 	channel = None
-	lineRate = 3
-
-	#def __init__ ( self, project ):
-		#irc.IRCClient.__init__( self )
-		#self.nickname = project.settings['bot']['name']
+	lineRate = 2
 
 	def signedOn( self ):
 		self.join( self.factory.channel )
@@ -39,12 +35,18 @@ class GoogleCodeIRCBot ( irc.IRCClient ):
 
 	def joined( self, channel ):
 		self.channel = self.factory.channel
+		self.lineRate = None
+		self.trysay( "Hello, I'm a Google Code IRC Bot, Version %s" % shared.VERSION )
+		self.trysay( "More details are available at %s" % shared.SOURCE_URL )
+		self.lineRate = 2
 
 	def left( self, channel ):
 		self.channel = None
 
 	def trysay( self, msg ):
-		"""Attempts to send the given message to the channel."""
+		"""
+		Attempts to send the given message to the channel.
+		"""
 		if self.channel:
 			try:
 				self.say( self.channel, msg )

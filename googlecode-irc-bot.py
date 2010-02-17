@@ -20,21 +20,43 @@ from time import sleep
 from multiprocessing import Process
 
 def run_bot ( project ):
-
+	"""
+	Run an ircbot in another process.
+	"""
 	ircbot.GoogleCodeIRCBot.nickname = project.settings['project']['bot']['name']
 	
 	factory = ircbot.GoogleCodeIRCBotFactory( project.settings['project']['bot']['channel'] )
 	
-	#feed = readers.GoogleCodeFeedReader( settings['project']['name'] )
+	issues_feed = None
+	downloads_feed = None
+	wiki_feed = None
+	
+	if 0 != project.settings['project']['feeds']['issues']:
+		issues_feed = readers.IssueUpdatesReader( project.name )
+	
+	if 0 != project.settings['project']['feeds']['downloads']:
+		downloads_feed = readers.DownloadsReader( project.name )
+	
+	if 0 != project.settings['project']['feeds']['wiki']:
+		wiki_feed = readers.WikiReader( project.name )
 	
 	reactor.connectTCP( project.settings['project']['bot']['server'], project.settings['project']['bot']['port'], factory )
 
-	#feed.update() # No flood on load
+	if None != issues_feed:
+		issues_update_task = task.LoopingCall( ircbot.announce, issues_feed )
+		issues_update_task.start( project.settings['project']['feeds']['issues'], now=False )
+		reactor.callLater( 20, ircbot.announce, issues_feed )
 
-	#update_task = task.LoopingCall( announce, feed )
-	#update_task.start( settings['project']['feed']['refresh'], now=False )
+	if None != downloads_feed:
+		downloads_update_task = task.LoopingCall( ircbot.announce, downloads_feed )
+		downloads_update_task.start( project.settings['project']['feeds']['downloads'], now=False )
+		reactor.callLater( 20, ircbot.announce, downloads_feed )
 
-	#reactor.callLater( 10, announce, feed )
+	if None != wiki_feed:
+		wiki_update_task = task.LoopingCall( ircbot.announce, wiki_feed )
+		wiki_update_task.start( project.settings['project']['feeds']['wiki'], now=False )
+		reactor.callLater( 20, ircbot.announce, wiki_feed )
+
 	reactor.run()
 
 bot_processes = {}
