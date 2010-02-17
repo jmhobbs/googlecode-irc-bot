@@ -11,22 +11,27 @@ class GoogleFeedReader:
 	
 	def __init__( self, project ):
 		self.project = project
-		self.last_id = 0
 		self.shelf = shelve.open( shared.SHELF + project + '.shelf' )
 		try:
 			if dict != type( self.shelf[self._name] ):
 				raise KeyError ( 'not a dict' )
 		except KeyError, e:
 			self.shelf[self._name] = {}
+		
+		self.last_id = self.read( 'last_id' )
 	
 	def __del__ ( self ):
+		self.write( 'last_id', self.last_id )
 		self.shelf.close()
 
 	def read ( self, key ):
 		"""
 		Get a value for a key from the shelf data store.
 		"""
-		return self.shelf[self._name][key]
+		if self.shelf[self._name].has_key( key ):
+			return self.shelf[self._name][key]
+		else:
+			return None
 	
 	def write ( self, key, value ):
 		"""

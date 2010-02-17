@@ -14,20 +14,20 @@ if __name__ != '__main__':
 	exit()
 
 from twisted.internet import reactor, task
-from gib import issues, project, readers, shared
+from gib import ircbot, issues, project, readers, shared
 import sys
 from time import sleep
 from multiprocessing import Process
 
 def run_bot ( project ):
-	print "Run Bot:", project.name
-	#AnnounceBot.nickname = settings['project']['bot']['name']
+
+	ircbot.GoogleCodeIRCBot.nickname = project.settings['project']['bot']['name']
 	
-	#fact = AnnounceBotFactory( settings['project']['bot']['channel'] )
+	factory = ircbot.GoogleCodeIRCBotFactory( project.settings['project']['bot']['channel'] )
 	
-	#feed = GoogleCodeFeedReader( settings['project']['name'] )
+	#feed = readers.GoogleCodeFeedReader( settings['project']['name'] )
 	
-	#reactor.connectTCP( settings['project']['bot']['server'], settings['project']['bot']['port'], fact )
+	reactor.connectTCP( project.settings['project']['bot']['server'], project.settings['project']['bot']['port'], factory )
 
 	#feed.update() # No flood on load
 
@@ -35,16 +35,27 @@ def run_bot ( project ):
 	#update_task.start( settings['project']['feed']['refresh'], now=False )
 
 	#reactor.callLater( 10, announce, feed )
-	#reactor.run()
+	reactor.run()
 
 bot_processes = {}
 
 bots = project.Project.load_all_from_path( sys.path[0] + "/bots/" )
 
-# Now spawn the necessary process
 for bot in bots:
 	if bot.name not in bot_processes.keys():
 		bot_processes[bot.name] = Process( target=run_bot, args=( bot, ) )
 		bot_processes[bot.name].daemon = True
 		bot_processes[bot.name].start()
 		print "Started", bot.name
+
+while True:
+	try:
+		sleep( 60 ) # TODO: Make configurable
+		for key, process in bot_processes.items():
+			if not process.is_alive():
+				print "Bot", key, "has died!"
+	except KeyboardInterrupt, e:
+		print "Shutting Down"
+		exit()
+	except Exception, e:
+		print "Error:", e

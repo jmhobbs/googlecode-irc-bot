@@ -6,6 +6,7 @@
 from twisted.words.protocols import irc
 from twisted.internet import reactor, protocol, task
 
+import shared
 		#def strip_tags(value):
 		#return re.sub( r'<[^>]*?>', '', value )
 
@@ -16,25 +17,25 @@ from twisted.internet import reactor, protocol, task
 		#if AnnounceBot.instance:
 			#AnnounceBot.instance.trysay( msg.replace( '\n', '' ).encode( 'utf-8' ) )
 	
-
-
-class AnnounceBot( irc.IRCClient ):
-
-	username = "%s-%s" % (NAME, VERSION)
-	sourceURL = "http://strobe.cc/"
-
-	# I am a terrible person.
+class GoogleCodeIRCBot ( irc.IRCClient ):
+	
+	username = "%s-%s" % ( shared.NAME, shared.VERSION )
+	
+	versionName = shared.NAME
+	versionNum = shared.VERSION
+	sourceURL = shared.SOURCE_URL
+	
 	instance = None
-
-	# Intentionally 'None' until we join a channel
 	channel = None
-
-	# Prevent flooding
 	lineRate = 3
+
+	#def __init__ ( self, project ):
+		#irc.IRCClient.__init__( self )
+		#self.nickname = project.settings['bot']['name']
 
 	def signedOn( self ):
 		self.join( self.factory.channel )
-		AnnounceBot.instance = self
+		GoogleCodeIRCBot.instance = self
 
 	def joined( self, channel ):
 		self.channel = self.factory.channel
@@ -50,8 +51,10 @@ class AnnounceBot( irc.IRCClient ):
 				return True
 			except: pass
 
-class AnnounceBotFactory( protocol.ReconnectingClientFactory ):
-	protocol = AnnounceBot
+class GoogleCodeIRCBotFactory( protocol.ReconnectingClientFactory ):
+
+	protocol = GoogleCodeIRCBot
+	
 	def __init__( self, channel ):
 		self.channel = channel
 

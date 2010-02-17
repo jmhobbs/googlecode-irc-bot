@@ -21,7 +21,7 @@ class Project:
 			if 'project' not in self.settings.keys():
 				raise KeyError( '/project' )
 			
-			for key in ( 'name', 'bot', 'feeds' ):
+			for key in ( 'name', 'bot', 'feeds', 'issues' ):
 				if key not in self.settings['project'].keys():
 					raise KeyError( '/project/' + key )
 
@@ -32,13 +32,17 @@ class Project:
 			for key in ( 'issues', 'downloads', 'wiki' ):
 				if key not in self.settings['project']['feeds'].keys():
 					raise KeyError( '/project/feeds/' + key )
+					
+			for key in ( 'username', 'password' ):
+				if key not in self.settings['project']['issues'].keys():
+					raise KeyError( '/project/issues/' + key )
 
 			self.name = self.settings['project']['name']
 
 		except IOError, e:
 			raise Exception ( "Error Opening Bot Description - " + path + " : " + str( e ) )
 		except KeyError, e:
-			raise Exception ( "Error In Bot Description, Missing Required Key: " + str( e ) )
+			raise Exception ( "Error In Bot Description - " + path + " - Missing Required Key: " + str( e ) )
 		return
 
 	@staticmethod

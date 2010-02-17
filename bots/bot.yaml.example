@@ -9,3 +9,6 @@ project:
     issues: 600
     downloads: 600
     wiki: 600
+  issues:
+    username: example@gmail.com
+    password: example
