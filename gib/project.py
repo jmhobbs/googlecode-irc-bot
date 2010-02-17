@@ -5,34 +5,34 @@ import yaml
 
 class Project:
 
-	
+	settings = None
+	name = ''
 
-	def __init__ ( self ):
-		return
-
-	def load_from_file ( self, path ):
+	def __init__ ( self, path ):
 		"""
 		Attempt to load the project settings from a given file.
 		"""
 		try:
 			f = open( path )
-			settings = yaml.safe_load( f.read() )
+			self.settings = yaml.safe_load( f.read() )
 			f.close()
 			
 			# Make sure what we need is there
-			if 'project' not in settings.keys():
+			if 'project' not in self.settings.keys():
 				raise KeyError( '/project' )
 			
 			for key in ( 'name', 'bot', 'feed' ):
-				if key not in settings['project'].keys():
+				if key not in self.settings['project'].keys():
 					raise KeyError( '/project/' + key )
 
 			for key in ( 'name', 'channel', 'server', 'port' ):
-				if key not in settings['project']['bot'].keys():
+				if key not in self.settings['project']['bot'].keys():
 					raise KeyError( '/project/bot/' + key )
 
-			if 'refresh' not in settings['project']['feed'].keys():
+			if 'refresh' not in self.settings['project']['feed'].keys():
 				raise KeyError( '/project/feed/refresh' )
+
+			self.name = self.settings['project']['name']
 
 		except IOError, e:
 			raise Exception ( "Error Opening Bot Description - " + path + " : " + str( e ) )
@@ -49,8 +49,7 @@ class Project:
 		for filename in os.listdir( path ):
 			if ".yaml" == filename[-5:]:
 				try:
-					project = Project()
-					project.load_from_file( path + filename )
+					project = Project( path + filename )
 					projects.append( project )
 				except Exception, e:
 					continue
