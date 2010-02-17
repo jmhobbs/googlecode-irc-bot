@@ -70,6 +70,8 @@ class GoogleFeedReader:
 		"""Returns list of new items."""
 		# TODO: ETag & Last-Modified
 		feed = feedparser.parse( self._schema % self.project )
+		if feed.status != 200:
+			return ()
 		return self.parse( feed )
 
 	def parse ( self, feed ):
@@ -81,7 +83,8 @@ class GoogleFeedReader:
 			if entry['id'] == self.last_id:
 				break
 			added.append( entry )
-		self.last_id = feed['entries'][0]['id']
+		if 1 <= len( feed['entries'] ):
+			self.last_id = feed['entries'][0]['id']
 		return added
 
 	def get_message ( self, entry ):
