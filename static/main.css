@@ -1,0 +1,32 @@
+body {
+	font-family: "Courier New", Courier, "Lucidia Console", monospace;
+	font-size: 12px;
+}
+
+.time {
+	width: 70px;
+	font-weight: bold;
+	display: inline-block;
+	float: left;
+}
+
+.message {
+	float: left;
+	margin-left: 5px;
+	width: 720px;
+}
+
+.log > br {
+	clear: both;
+}
+
+div.odd {
+	background-color: #DEDEDE;
+	display: inline-block;
+}
+
+.user { font-weight: bold; }
+.user-0 { color: #44F; }
+.user-1 { color: #F00; }
+.user-2 { color: #0F0; }
+.user-3 { color: #00F; }

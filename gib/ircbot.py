@@ -54,11 +54,11 @@ class GoogleCodeIRCBot ( irc.IRCClient ):
 		irc.IRCClient.connectionMade( self )
 		if self.logger:
 			self.logger.connected()
-	
+
 	def connectionLost( self, reason ):
 		irc.IRCClient.connectionLost( self, reason )
 		if self.logger:
-			self.logger.disconnected( reason )
+			self.logger.disconnected()
 
 	def signedOn( self ):
 		self.join( self.factory.channel )
@@ -66,10 +66,10 @@ class GoogleCodeIRCBot ( irc.IRCClient ):
 
 	def joined( self, channel ):
 		self.channel = self.factory.channel
-		
+
 		if self.logger:
 			self.logger.joined( channel )
-		
+
 		self.lineRate = None
 		self.trysay( "Hello, I'm a Google Code IRC Bot, Version %s" % shared.VERSION )
 		self.trysay( "More details are available at %s" % shared.SOURCE_URL )
@@ -85,6 +85,8 @@ class GoogleCodeIRCBot ( irc.IRCClient ):
 		if self.channel:
 			try:
 				self.say( self.channel, msg )
+				if self.logger:
+					self.logger.message( self.nickname, msg )
 				return True
 			except: pass
 

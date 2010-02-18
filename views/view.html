@@ -1,1 +1,14 @@
-<h2>Todo: View</h2>
+$def with ( lines, project, date, page )
+
+<h2><a href="/">Projects</a>/<a href="/list/$project">$project</a>/$date</h2>
+
+<div class="log">
+$for line in lines:
+	$if loop.even:
+		<div class="odd">
+	$else:
+		<div>
+	$:line
+	<br/>
+	</div>
+</div>

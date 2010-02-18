@@ -45,21 +45,21 @@ class IRCLogger:
 
 	def close ( self ):
 		self.file.close()
-		
+
 	def connected ( self ):
 		self.log( "[connected]" )
-	
-	def disconnected ( self, reason ):
-		self.log( "[disconnected - %s]" % reason )
+
+	def disconnected ( self ):
+		self.log( "[disconnected]" )
 
 	def joined ( self, channel ):
 		self.log( "[joined %s]" % channel )
-	
+
 	def message ( self, user, message ):
 		self.log( "<%s> %s" % ( user, message ) )
-	
+
 	def action ( self, user, message ):
 		self.log( "* %s %s" % ( user, message ) )
-		
+
 	def nick_change ( self, old_nick, new_nick ):
 		self.log( "%s is now known as %s" % ( old_nick, new_nick ) )

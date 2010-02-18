@@ -4,3 +4,4 @@ atom/*
 gdata/*
 shelf/*.shelf
 *.log
+web/*

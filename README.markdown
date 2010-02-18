@@ -16,8 +16,13 @@ To create an IRC bot that will publish Google Code changes to an IRC channel. Ev
   * [Twisted](http://twistedmatrix.com/trac/)
   * [Feedparser](http://www.feedparser.org/)
   * [PyYAML](http://pyyaml.org/)
-  * [GData](http://code.google.com/p/gdata-python-client/)
+  * [GData >= 2.0.4](http://code.google.com/p/gdata-python-client/)
   * Intestinal Fortitude (if you are going to read the code)
+
+  If you are going to use the log viewer you'll also need:
+
+  * [Python >= 2.4](http://python.org/)
+  * [web.py](http://www.webpy.org/)
 
 ## Credits
 
