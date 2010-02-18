@@ -2,7 +2,7 @@
 
 To create an IRC bot that will publish Google Code changes to an IRC channel. Eventually we want to support queries and actions as well.
 
-Additionally there is a 
+Additionally there is a log view web server included, log-view.py.  You can see an example of this server at <http://irclogs.velvetcache.org>
 
 ## Roadmap
 
