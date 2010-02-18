@@ -59,7 +59,8 @@ class IRCLogger:
 		self.log( "<%s> %s" % ( user, message ) )
 
 	def action ( self, user, message ):
-		self.log( "* %s %s" % ( user, message ) )
+		user = user.split( '!' )
+		self.log( "* %s %s" % ( user[0], message ) )
 
 	def nick_change ( self, old_nick, new_nick ):
 		self.log( "%s is now known as %s" % ( old_nick, new_nick ) )
