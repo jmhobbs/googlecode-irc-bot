@@ -81,6 +81,12 @@ def markup_log_lines ( lines ):
 			i = len( user ) + 9
 			message = '&lt;<span class="user user-' + str( user_number ) + '">' + user + '</span>&gt; ' + message[i:]
 
+		# Look for URL's
+		message = message + " " # Must end with a space so that this regex works
+		finder = re.compile( r'(https?://.+?) ' )
+		message = finder.sub( r'<a href="\1">\1</a> ', message )
+		message = message[:-1] # Trim that space off again
+
 		line = '<div class="time">' + timestamp + '</div><div class="message">' + message + '</div>'
 		lines[counter] = line
 		counter = counter + 1;

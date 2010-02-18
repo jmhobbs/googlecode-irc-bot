@@ -2,13 +2,15 @@
 
 To create an IRC bot that will publish Google Code changes to an IRC channel. Eventually we want to support queries and actions as well.
 
+Additionally there is a 
+
 ## Roadmap
 
   * Basic feed based IRC bot - **DONE**
   * Multiple project support with YAML & Multiprocessing - **DONE**
-  * Daemon monitoring, auditing & dynamic loading.
-  * In depth logging facilities.
-  * Query interaction.
+  * Daemon monitoring, auditing & dynamic loading. - __STARTED__
+  * IRC logging - **DONE**
+  * Query interaction. - __STARTED__
 
 ## Requirements
 
@@ -23,6 +25,13 @@ To create an IRC bot that will publish Google Code changes to an IRC channel. Ev
 
   * [Python >= 2.4](http://python.org/)
   * [web.py](http://www.webpy.org/)
+
+## Usage
+
+  * Create a bot yaml file in ./bots/
+  * Run googlecode-irc-bot.py
+  * Enjoy your bot
+  * To view IRC logs, run log-view.py and visit http://localhost:8080/
 
 ## Credits
 

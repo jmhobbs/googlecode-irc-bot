@@ -26,7 +26,25 @@ div.odd {
 }
 
 .user { font-weight: bold; }
-.user-0 { color: #44F; }
-.user-1 { color: #F00; }
-.user-2 { color: #0F0; }
-.user-3 { color: #00F; }
+/* Unique Colors for the first 20 conversants */
+.user-0 { color: #9ACD32; }
+.user-1 { color: #8A2BE2; }
+.user-2 { color: #FF8C00; }
+.user-3 { color: #7FFF00; }
+.user-4 { color: #A52A2A; }
+.user-5 { color: #1E90FF; }
+.user-6 { color: #556B2F; }
+.user-7 { color: #FF1493; }
+.user-8 { color: #00008B; }
+.user-9 { color: #8B0000; }
+.user-10 { color: #FFD700; }
+.user-11 { color: #CD5C5C; }
+.user-12 { color: #4B0082; }
+.user-13 { color: #20B2AA; }
+.user-14 { color: #BA55D3; }
+.user-15 { color: #FFA07A; }
+.user-16 { color: #FF4500; }
+.user-17 { color: #DDA0DD; }
+.user-18 { color: #4169E1; }
+.user-19 { color: #FA8072; }
+.user-20 { color: #7FFFD4; }
