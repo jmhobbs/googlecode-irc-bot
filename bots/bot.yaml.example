@@ -16,3 +16,4 @@ project:
   privignore:
   - ChanServ
   - jmhobbs
+  vcs: svn

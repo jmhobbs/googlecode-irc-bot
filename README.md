@@ -54,6 +54,7 @@ Additionally there is a log view web server included, log-view.py.  You can see 
 	  - ChanServ   // ChanServ can get into a loop if it asks your bot something
 	  - NickServ
 	  - jmhobbs    // Nobody listens to me anyway...
+	  vcs: svn   // svn, hg, git...
 
 ### Debugging
 

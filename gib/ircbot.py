@@ -97,7 +97,7 @@ class GoogleCodeIRCBot ( irc.IRCClient ):
 					self.logger.message( self.nickname, msg )
 				return True
 			except Exception, e:
-				log.msg( self.nickname + ": Error saying : " + e )
+				log.msg( self.nickname + ": Error saying : " + str( e ) )
 
 	def privmsg ( self, user, channel, msg ):
 		user = user.split('!', 1)[0]
