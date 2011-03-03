@@ -65,7 +65,7 @@ Having problems?  You can tail the log, or you can pass -debug to the script to 
 
 Inspiration and foundations from Quodlibot by Steven Robertson - [http://strobe.cc/quodlibot/](http://strobe.cc/quodlibot/)
 
-ChanServ loop bug identified by daenney - [https://github.com/daenney]
+ChanServ loop bug identified by daenney - [https://github.com/daenney](https://github.com/daenney)
 
 ## License
 
