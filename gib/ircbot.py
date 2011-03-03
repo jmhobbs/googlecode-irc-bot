@@ -96,7 +96,7 @@ class GoogleCodeIRCBot ( irc.IRCClient ):
 				if self.logger:
 					self.logger.message( self.nickname, msg )
 				return True
-			except e:
+			except Exception, e:
 				log.msg( self.nickname + ": Error saying : " + e )
 
 	def privmsg ( self, user, channel, msg ):
@@ -118,12 +118,12 @@ class GoogleCodeIRCBot ( irc.IRCClient ):
 		if channel == self.channel:
 			if msg.startswith( self.nickname + ":" ):
 				args = msg.split( ' ')
-				if 'OPEN' == args[1]:
+				if 'open' == args[1].lower():
 					if self.gdata:
 						msg = "%s: There are %d open issues." % ( user, self.gdata.get_issue_count() )
 					else:
 						msg = "Sorry, I have no connection to the issue tracker."
-				elif 'HELP' == args[1]:
+				elif 'help' == args[1].lower():
 					msg = "%s: Valid commands are [ OPEN, HELP ]. Please visit %s for more help." % ( user, shared.SOURCE_URL )
 				else:
 					msg = "%s: Um, what? Try HELP." % user

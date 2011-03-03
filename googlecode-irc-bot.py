@@ -55,6 +55,7 @@ def run_bot ( project ):
 	issues_feed = None
 	downloads_feed = None
 	wiki_feed = None
+	code_feed = None
 
 	if 0 != project.settings['project']['feeds']['issues']:
 		issues_feed = readers.IssueUpdatesReader( project.name )
@@ -63,7 +64,10 @@ def run_bot ( project ):
 		downloads_feed = readers.DownloadsReader( project.name )
 
 	if 0 != project.settings['project']['feeds']['wiki']:
-		wiki_feed = readers.WikiReader( project.name )
+		wiki_feed = readers.WikiReader( project.name, project.vcs )
+        
+	if 0 != project.settings['project']['feeds']['code']:
+		code_feed = readers.CodeUpdatesReader( project.name, project.vcs )
 
 	reactor.connectTCP( project.settings['project']['bot']['server'], project.settings['project']['bot']['port'], factory )
 
@@ -81,6 +85,11 @@ def run_bot ( project ):
 		wiki_update_task = task.LoopingCall( ircbot.announce, wiki_feed )
 		wiki_update_task.start( project.settings['project']['feeds']['wiki'], now=False )
 		reactor.callLater( 20, ircbot.announce, wiki_feed )
+
+	if None != code_feed:
+		code_update_task = task.LoopingCall( ircbot.announce, code_feed )
+		code_update_task.start( project.settings['project']['feeds']['code'], now=False )
+		reactor.callLater( 20, ircbot.announce, code_feed )
 
 	reactor.run()
 

@@ -31,8 +31,9 @@ class GoogleFeedReader:
 	_schema = ''
 	_name = 'base'
 	
-	def __init__( self, project ):
-		self.project = project
+	def __init__( self, project, *args ):
+		self.schema_keys = [project,]
+		self.schema_keys.extend( args )
 		self.shelf = shelve.open( shared.SHELF + project + '.shelf' )
 		try:
 			if dict != type( self.shelf[self._name] ):
@@ -69,7 +70,9 @@ class GoogleFeedReader:
 	def update ( self ):
 		"""Returns list of new items."""
 		# TODO: ETag & Last-Modified
-		feed = feedparser.parse( self._schema % self.project )
+		for item in self.schema_keys:
+			print item
+		feed = feedparser.parse( self._schema % tuple( self.schema_keys ) )
 		if feed.status != 200:
 			return ()
 		return self.parse( feed )
@@ -95,9 +98,6 @@ class IssueUpdatesReader ( GoogleFeedReader ):
 	_schema = 'http://code.google.com/feeds/p/%s/issueupdates/basic'
 	_name = 'issues'
 	
-	def __init__( self, project ):
-		GoogleFeedReader.__init__( self, project )
-		
 	def get_message ( self, entry ):
 		return '[Issues] %s: %s' % ( shared.strip_tags( entry['title'] ), entry['link'] )
 
@@ -106,19 +106,21 @@ class DownloadsReader ( GoogleFeedReader ):
 	_schema = 'http://code.google.com/feeds/p/%s/downloads/basic'
 	_name = 'downloads'
 
-	def __init__( self, project ):
-		GoogleFeedReader.__init__( self, project )
-
 	def get_message ( self, entry ):
 		return '[Downloads] %s: %s' % ( shared.strip_tags( entry['title'] ), entry['link'] )
 
 class WikiReader ( GoogleFeedReader ):
 
-	_schema = 'http://code.google.com/feeds/p/%s/svnchanges/basic?path=/wiki/'
+	_schema = 'http://code.google.com/feeds/p/%s/%schanges/basic?path=/wiki/'
 	_name = 'wiki'
-
-	def __init__( self, project ):
-		GoogleFeedReader.__init__( self, project )
 
 	def get_message ( self, entry ):
 		return '[Wiki] %s: %s' % ( shared.strip_tags( entry['title'] ), entry['link'] )
+
+class CodeUpdatesReader ( GoogleFeedReader ):
+
+	_schema = 'http://code.google.com/feeds/p/%s/%schanges/basic'
+	_name = 'code'
+
+	def get_message ( self, entry ):
+		return '[Code] %s: %s' % ( shared.strip_tags( entry['title'] ), entry['link'] )

@@ -29,6 +29,7 @@ class Project:
 
 	settings = None
 	name = ''
+	vcs = ''
 
 	def __init__ ( self, path ):
 		"""
@@ -43,7 +44,7 @@ class Project:
 			if 'project' not in self.settings.keys():
 				raise KeyError( '/project' )
 
-			for key in ( 'name', 'bot', 'feeds', 'issues', 'logging', 'privignore' ):
+			for key in ( 'name', 'bot', 'feeds', 'issues', 'logging', 'privignore', 'vcs' ):
 				if key not in self.settings['project'].keys():
 					raise KeyError( '/project/' + key )
 
@@ -58,8 +59,9 @@ class Project:
 			for key in ( 'username', 'password' ):
 				if key not in self.settings['project']['issues'].keys():
 					raise KeyError( '/project/issues/' + key )
-
+            
 			self.name = self.settings['project']['name']
+			self.vcs = self.settings['project']['vcs']
 
 		except IOError, e:
 			raise Exception ( "Error Opening Bot Description - " + path + " : " + str( e ) )
