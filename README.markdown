@@ -33,6 +33,12 @@ Additionally there is a log view web server included, log-view.py.  You can see 
   * Enjoy your bot
   * To view IRC logs, run log-view.py and visit http://localhost:8080/
 
+### Debugging
+
+Having problems?  You can tail the log, or you can pass -debug to the script to add stdout logging of the Twisted framework.
+
+    $ python googlecode-irc-bot.py -debug
+
 ## Credits
 
 Inspiration and foundations from Quodlibot by Steven Robertson - [http://strobe.cc/quodlibot/](http://strobe.cc/quodlibot/)

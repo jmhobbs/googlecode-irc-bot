@@ -24,6 +24,7 @@
 
 from twisted.words.protocols import irc
 from twisted.internet import reactor, protocol, task
+from twisted.python import log
 
 import shared
 
@@ -52,21 +53,25 @@ class GoogleCodeIRCBot ( irc.IRCClient ):
 
 	def connectionMade ( self ):
 		irc.IRCClient.connectionMade( self )
+		log.msg( self.nickname + ": Connected" )
 		if self.logger:
 			self.logger.connected()
 
 	def connectionLost( self, reason ):
 		irc.IRCClient.connectionLost( self, reason )
+		log.msg( self.nickname + ": Connection Lost" )
 		if self.logger:
 			self.logger.disconnected()
 
 	def signedOn( self ):
 		self.join( self.factory.channel )
+		log.msg( self.nickname + ": Signed On" )
 		GoogleCodeIRCBot.instance = self
 
 	def joined( self, channel ):
 		self.channel = self.factory.channel
 
+		log.msg( self.nickname + ": Joined " + self.channel )
 		if self.logger:
 			self.logger.joined( channel )
 
@@ -76,6 +81,7 @@ class GoogleCodeIRCBot ( irc.IRCClient ):
 		self.lineRate = 2
 
 	def left( self, channel ):
+		log.msg( self.nickname + ": Left Channel " + channel )
 		self.channel = None
 
 	def trysay( self, msg ):
@@ -85,14 +91,17 @@ class GoogleCodeIRCBot ( irc.IRCClient ):
 		if self.channel:
 			try:
 				self.say( self.channel, msg )
+				log.msg( self.nickname + ": Say : " + msg )
 				if self.logger:
 					self.logger.message( self.nickname, msg )
 				return True
-			except: pass
+			except e:
+				log.msg( self.nickname + ": Error saying : " + e )
 
 	def privmsg ( self, user, channel, msg ):
 		user = user.split('!', 1)[0]
 
+		log.msg( self.nickname + ": Private Message : " + user + " " + msg )
 		if self.logger:
 			self.logger.message( user, msg )
 

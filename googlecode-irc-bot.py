@@ -25,15 +25,13 @@
 # Gracious credit goes to Steven Robertson, whose Quodlibot provided inspiration and foundation
 # http://strobe.cc/quodlibot/
 
-if __name__ != '__main__':
-	print "This can only be run as a main entry point."
-	exit()
 
 from twisted.internet import reactor, task
 from gib import ircbot, issues, project, readers, shared, logger
 import sys
 from time import sleep
 from multiprocessing import Process
+from twisted.python import log
 
 def run_bot ( project ):
 	"""
@@ -84,25 +82,36 @@ def run_bot ( project ):
 
 	reactor.run()
 
-bot_processes = {}
 
-bots = project.Project.load_all_from_path( sys.path[0] + "/bots/" )
+def main ():
 
-for bot in bots:
-	if bot.name not in bot_processes.keys():
-		bot_processes[bot.name] = Process( target=run_bot, args=( bot, ) )
-		bot_processes[bot.name].daemon = True
-		bot_processes[bot.name].start()
-		print "Started", bot.name
+	bot_processes = {}
+	bots = project.Project.load_all_from_path( sys.path[0] + "/bots/" )
 
-while True:
-	try:
-		sleep( 60 ) # TODO: Make configurable
-		for key, process in bot_processes.items():
-			if not process.is_alive():
-				print "Bot", key, "has died!"
-	except KeyboardInterrupt, e:
-		print "Shutting Down"
-		exit()
-	except Exception, e:
-		print "Error:", e
+	if len(sys.argv) > 1 and sys.argv[1] == "-debug":
+		log.startLogging(sys.stdout)
+
+	for bot in bots:
+		if bot.name not in bot_processes.keys():
+			bot_processes[bot.name] = Process( target=run_bot, args=( bot, ) )
+			bot_processes[bot.name].daemon = True
+			bot_processes[bot.name].start()
+			print "Started", bot.name
+
+	while True:
+		try:
+			sleep( 60 ) # TODO: Make configurable
+			for key, process in bot_processes.items():
+				if not process.is_alive():
+					print "Bot", key, "has died!"
+		except KeyboardInterrupt, e:
+			print "Shutting Down"
+			exit()
+		except Exception, e:
+			print "Error:", e
+
+if __name__ != '__main__':
+	print "This can only be run as a main entry point."
+	exit()
+else:
+	main()
