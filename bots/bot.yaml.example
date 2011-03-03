@@ -13,3 +13,6 @@ project:
     username: example@gmail.com
     password: example
   logging: True
+  privignore:
+  - ChanServ
+  - jmhobbs

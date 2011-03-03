@@ -10,10 +10,10 @@
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -38,31 +38,33 @@ def run_bot ( project ):
 	Run an ircbot in another process.
 	"""
 	ircbot.GoogleCodeIRCBot.nickname = project.settings['project']['bot']['name']
-	
+
 	if project.settings['project']['issues']['username'] != '' and project.settings['project']['issues']['password'] != '':
 		try:
 			ircbot.GoogleCodeIRCBot.gdata = issues.GoogleIssueTracker( project.settings['project']['issues']['username'], project.settings['project']['issues']['password'], project.name )
 		except:
 			ircbot.GoogleCodeIRCBot.gdata = None
-	
+
+	ircbot.GoogleCodeIRCBot.privmsg_ignore = project.settings['project']['privignore']
+
 	if project.settings['project']['logging']:
 		ircbot.GoogleCodeIRCBot.logger = logger.IRCLogger( shared.IRC_LOGS, project.name )
-	
+
 	factory = ircbot.GoogleCodeIRCBotFactory( project.settings['project']['bot']['channel'] )
-	
+
 	issues_feed = None
 	downloads_feed = None
 	wiki_feed = None
-	
+
 	if 0 != project.settings['project']['feeds']['issues']:
 		issues_feed = readers.IssueUpdatesReader( project.name )
-	
+
 	if 0 != project.settings['project']['feeds']['downloads']:
 		downloads_feed = readers.DownloadsReader( project.name )
-	
+
 	if 0 != project.settings['project']['feeds']['wiki']:
 		wiki_feed = readers.WikiReader( project.name )
-	
+
 	reactor.connectTCP( project.settings['project']['bot']['server'], project.settings['project']['bot']['port'], factory )
 
 	if None != issues_feed:

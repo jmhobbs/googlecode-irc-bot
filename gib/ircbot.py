@@ -50,6 +50,7 @@ class GoogleCodeIRCBot ( irc.IRCClient ):
 	channel = None
 	lineRate = 2
 	logger = None
+	privmsg_ignore = []
 
 	def connectionMade ( self ):
 		irc.IRCClient.connectionMade( self )
@@ -101,9 +102,13 @@ class GoogleCodeIRCBot ( irc.IRCClient ):
 	def privmsg ( self, user, channel, msg ):
 		user = user.split('!', 1)[0]
 
-		log.msg( self.nickname + ": Private Message : " + user + " " + msg )
+		log.msg( self.nickname + ": Private Message : " + user + " says: " + msg )
 		if self.logger:
 			self.logger.message( user, msg )
+
+		if user in self.privmsg_ignore:
+			log.msg( self.nickname + ": Ignoring Private Message From " + user )
+			return
 
 		if channel == self.nickname:
 				msg = "It isn't nice to whisper!  Play nice with the group."
