@@ -68,6 +68,8 @@ Inspiration and foundations from Quodlibot by Steven Robertson - [http://strobe.
 
 ChanServ loop bug identified by daenney - [https://github.com/daenney](https://github.com/daenney)
 
+VCS options and code feed reader by daenney - [https://github.com/daenney](https://github.com/daenney)
+
 ## License
 
 Copyright (c) 2010 John Hobbs
